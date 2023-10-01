@@ -1,0 +1,8 @@
+#For move joints
+float32 goal_pan
+float32 goal_tilt
+---
+bool result
+---
+float32 pos_pan
+float32 pos_tilt
