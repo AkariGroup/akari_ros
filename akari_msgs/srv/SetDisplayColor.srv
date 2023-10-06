@@ -1,4 +1,5 @@
 #For set LCD color
 string color
+bool sync
 ---
 bool result

@@ -83,10 +83,11 @@ class M5Server(Node):  # type: ignore
             "PINK",
         ]
         req_color = request.color.upper()
+        sync = request.sync
         response.result = True
         if req_color in color_pair:
             try:
-                self.m5.set_display_color(Colors[req_color])
+                self.m5.set_display_color(Colors[req_color], sync)
             except BaseException as e:
                 self.get_logger().error(e)
                 response.result = False
@@ -101,10 +102,11 @@ class M5Server(Node):  # type: ignore
         r_color = request.r
         g_color = request.g
         b_color = request.b
+        sync = request.sync
         color = Color(red=r_color, green=g_color, blue=b_color)
         response.result = True
         try:
-            self.m5.set_display_color(color)
+            self.m5.set_display_color(color, sync=sync)
         except BaseException as e:
             self.get_logger().error(e)
             response.result = False
@@ -120,6 +122,7 @@ class M5Server(Node):  # type: ignore
         req_text_color = request.text_color
         req_back_color = request.back_color
         req_refresh = request.refresh
+        sync = request.sync
         response.result = True
         try:
             self.m5.set_display_text(
@@ -130,6 +133,7 @@ class M5Server(Node):  # type: ignore
                 text_color=Colors[req_text_color],
                 back_color=Colors[req_back_color],
                 refresh=req_refresh,
+                sync=sync,
             )
         except BaseException as e:
             self.get_logger().error(e)
@@ -143,9 +147,10 @@ class M5Server(Node):  # type: ignore
         pos_x = request.pos_x
         pos_y = request.pos_y
         scale = request.scale
+        sync = request.sync
         response.result = True
         try:
-            self.m5.set_display_image(filepath, pos_x, pos_y, scale)
+            self.m5.set_display_image(filepath, pos_x, pos_y, scale, sync)
         except BaseException as e:
             self.get_logger().error(e)
             response.result = False
