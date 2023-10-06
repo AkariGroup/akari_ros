@@ -172,10 +172,11 @@ class M5Server(Node):  # type: ignore
     ) -> SetDout.Response:
         req_id = request.pin_id
         req_val = request.val
+        sync = request.sync
         response.result = True
         if 0 <= req_id <= 1:
             try:
-                self.m5.set_dout(req_id, req_val)
+                self.m5.set_dout(req_id, req_val, sync)
             except BaseException as e:
                 self.get_logger().error(e)
                 response.result = False
@@ -191,10 +192,11 @@ class M5Server(Node):  # type: ignore
     ) -> SetPwmout.Response:
         req_id = request.pin_id
         req_val = request.val
+        sync = request.sync
         response.result = True
         if req_id == 0 and 0 <= req_val < 256:
             try:
-                self.m5.set_pwmout(req_id, req_val)
+                self.m5.set_pwmout(req_id, req_val, sync)
             except BaseException as e:
                 self.get_logger().error(e)
                 response.result = False
@@ -212,11 +214,12 @@ class M5Server(Node):  # type: ignore
         req_dout0 = request.dout0_val
         req_dout1 = request.dout1_val
         req_pwmout0_val = request.pwmout0_val
+        sync = request.sync
         response.result = True
         if 0 <= req_pwmout0_val < 256:
             try:
                 self.m5.set_allout(
-                    dout0=req_dout0, dout1=req_dout1, pwmout0=req_pwmout0_val
+                    dout0=req_dout0, dout1=req_dout1, pwmout0=req_pwmout0_val, sync=sync
                 )
             except BaseException as e:
                 self.get_logger().error(e)

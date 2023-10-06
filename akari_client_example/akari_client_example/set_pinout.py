@@ -34,6 +34,7 @@ def main(args: Optional[str] = None) -> None:
     req = SetDout.Request()
     req.pin_id = 0
     req.val = True
+    req.sync = True
     client.future = client.cli_dout.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -44,6 +45,7 @@ def main(args: Optional[str] = None) -> None:
     req = SetPwmout.Request()
     req.pin_id = 0
     req.val = 200
+    req.sync = True
     client.future = client.cli_pwmout.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -55,6 +57,7 @@ def main(args: Optional[str] = None) -> None:
     req.dout0_val = False
     req.dout1_val = True
     req.pwmout0_val = 100
+    req.sync = True
     client.future = client.cli_allout.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
