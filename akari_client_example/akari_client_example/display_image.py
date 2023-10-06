@@ -29,6 +29,7 @@ def main(args: Optional[str] = None) -> None:
     req.pos_x = Positions.CENTER
     req.pos_y = Positions.CENTER
     req.scale = 1.0
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -41,6 +42,7 @@ def main(args: Optional[str] = None) -> None:
     req.pos_x = Positions.RIGHT
     req.pos_y = Positions.BOTTOM
     req.scale = 0.7
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -53,6 +55,7 @@ def main(args: Optional[str] = None) -> None:
     req.pos_x = 50
     req.pos_y = 20
     req.scale = 0.3
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -65,6 +68,7 @@ def main(args: Optional[str] = None) -> None:
     req.pos_x = Positions.CENTER
     req.pos_y = Positions.CENTER
     req.scale = 1.0
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
