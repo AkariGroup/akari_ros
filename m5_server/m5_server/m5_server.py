@@ -18,6 +18,28 @@ from akari_msgs.srv import (
 )
 from rclpy.node import Node
 
+color_pair: List[str] = [
+    "BLACK",
+    "NAVY",
+    "DARKGREEN",
+    "DARKCYAN",
+    "MAROON",
+    "PURPLE",
+    "OLIVE",
+    "LIGHTGREY",
+    "DARKGREY",
+    "BLUE",
+    "GREEN",
+    "CYAN",
+    "RED",
+    "MAGENTA",
+    "YELLOW",
+    "WHITE",
+    "ORANGE",
+    "GREENYELLOW",
+    "PINK",
+]
+
 
 class M5Server(Node):  # type: ignore
     def __init__(self) -> None:
@@ -61,27 +83,6 @@ class M5Server(Node):  # type: ignore
     def set_display_color(
         self, request: SetDisplayColor.Request, response: SetDisplayColor.Response
     ) -> SetDisplayColor.Response:
-        color_pair: List[str] = [
-            "BLACK",
-            "NAVY",
-            "DARKGREEN",
-            "DARKCYAN",
-            "MAROON",
-            "PURPLE",
-            "OLIVE",
-            "LIGHTGREY",
-            "DARKGREY",
-            "BLUE",
-            "GREEN",
-            "CYAN",
-            "RED",
-            "MAGENTA",
-            "YELLOW",
-            "WHITE",
-            "ORANGE",
-            "GREENYELLOW",
-            "PINK",
-        ]
         req_color = request.color.upper()
         sync = request.sync
         response.result = True
@@ -124,6 +125,14 @@ class M5Server(Node):  # type: ignore
         req_refresh = request.refresh
         sync = request.sync
         response.result = True
+        if req_text_color not in color_pair:
+            self.get_logger().warn(f"Color {req_text_color} can't display")
+            response.result = False
+            return response
+        if req_back_color not in color_pair:
+            self.get_logger().warn(f"Color {req_back_color} can't display")
+            response.result = False
+            return response
         try:
             self.m5.set_display_text(
                 text=req_text,
