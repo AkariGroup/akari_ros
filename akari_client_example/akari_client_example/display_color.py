@@ -29,6 +29,7 @@ def main(args: Optional[str] = None) -> None:
     print("STEP1. Set display color to white")
     req = SetDisplayColor.Request()
     req.color = "WHITE"
+    req.sync = True
     client.future = client.cli_color.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -38,6 +39,7 @@ def main(args: Optional[str] = None) -> None:
     print("STEP1. Set display color to red")
     req = SetDisplayColor.Request()
     req.color = "RED"
+    req.sync = True
     client.future = client.cli_color.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -49,6 +51,7 @@ def main(args: Optional[str] = None) -> None:
     req.r = 0
     req.g = 255
     req.b = 0
+    req.sync = True
     client.future = client.cli_color_rgb.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")

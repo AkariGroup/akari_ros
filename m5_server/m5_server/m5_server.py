@@ -18,6 +18,28 @@ from akari_msgs.srv import (
 )
 from rclpy.node import Node
 
+color_pair: List[str] = [
+    "BLACK",
+    "NAVY",
+    "DARKGREEN",
+    "DARKCYAN",
+    "MAROON",
+    "PURPLE",
+    "OLIVE",
+    "LIGHTGREY",
+    "DARKGREY",
+    "BLUE",
+    "GREEN",
+    "CYAN",
+    "RED",
+    "MAGENTA",
+    "YELLOW",
+    "WHITE",
+    "ORANGE",
+    "GREENYELLOW",
+    "PINK",
+]
+
 
 class M5Server(Node):  # type: ignore
     def __init__(self) -> None:
@@ -61,32 +83,12 @@ class M5Server(Node):  # type: ignore
     def set_display_color(
         self, request: SetDisplayColor.Request, response: SetDisplayColor.Response
     ) -> SetDisplayColor.Response:
-        color_pair: List[str] = [
-            "BLACK",
-            "NAVY",
-            "DARKGREEN",
-            "DARKCYAN",
-            "MAROON",
-            "PURPLE",
-            "OLIVE",
-            "LIGHTGREY",
-            "DARKGREY",
-            "BLUE",
-            "GREEN",
-            "CYAN",
-            "RED",
-            "MAGENTA",
-            "YELLOW",
-            "WHITE",
-            "ORANGE",
-            "GREENYELLOW",
-            "PINK",
-        ]
         req_color = request.color.upper()
+        sync = request.sync
         response.result = True
         if req_color in color_pair:
             try:
-                self.m5.set_display_color(Colors[req_color])
+                self.m5.set_display_color(Colors[req_color], sync)
             except BaseException as e:
                 self.get_logger().error(e)
                 response.result = False
@@ -101,10 +103,11 @@ class M5Server(Node):  # type: ignore
         r_color = request.r
         g_color = request.g
         b_color = request.b
+        sync = request.sync
         color = Color(red=r_color, green=g_color, blue=b_color)
         response.result = True
         try:
-            self.m5.set_display_color(color)
+            self.m5.set_display_color(color, sync=sync)
         except BaseException as e:
             self.get_logger().error(e)
             response.result = False
@@ -120,7 +123,16 @@ class M5Server(Node):  # type: ignore
         req_text_color = request.text_color
         req_back_color = request.back_color
         req_refresh = request.refresh
+        sync = request.sync
         response.result = True
+        if req_text_color not in color_pair:
+            self.get_logger().warn(f"Color {req_text_color} can't display")
+            response.result = False
+            return response
+        if req_back_color not in color_pair:
+            self.get_logger().warn(f"Color {req_back_color} can't display")
+            response.result = False
+            return response
         try:
             self.m5.set_display_text(
                 text=req_text,
@@ -130,6 +142,7 @@ class M5Server(Node):  # type: ignore
                 text_color=Colors[req_text_color],
                 back_color=Colors[req_back_color],
                 refresh=req_refresh,
+                sync=sync,
             )
         except BaseException as e:
             self.get_logger().error(e)
@@ -143,9 +156,10 @@ class M5Server(Node):  # type: ignore
         pos_x = request.pos_x
         pos_y = request.pos_y
         scale = request.scale
+        sync = request.sync
         response.result = True
         try:
-            self.m5.set_display_image(filepath, pos_x, pos_y, scale)
+            self.m5.set_display_image(filepath, pos_x, pos_y, scale, sync)
         except BaseException as e:
             self.get_logger().error(e)
             response.result = False
@@ -167,10 +181,11 @@ class M5Server(Node):  # type: ignore
     ) -> SetDout.Response:
         req_id = request.pin_id
         req_val = request.val
+        sync = request.sync
         response.result = True
         if 0 <= req_id <= 1:
             try:
-                self.m5.set_dout(req_id, req_val)
+                self.m5.set_dout(req_id, req_val, sync)
             except BaseException as e:
                 self.get_logger().error(e)
                 response.result = False
@@ -186,10 +201,11 @@ class M5Server(Node):  # type: ignore
     ) -> SetPwmout.Response:
         req_id = request.pin_id
         req_val = request.val
+        sync = request.sync
         response.result = True
         if req_id == 0 and 0 <= req_val < 256:
             try:
-                self.m5.set_pwmout(req_id, req_val)
+                self.m5.set_pwmout(req_id, req_val, sync)
             except BaseException as e:
                 self.get_logger().error(e)
                 response.result = False
@@ -207,11 +223,12 @@ class M5Server(Node):  # type: ignore
         req_dout0 = request.dout0_val
         req_dout1 = request.dout1_val
         req_pwmout0_val = request.pwmout0_val
+        sync = request.sync
         response.result = True
         if 0 <= req_pwmout0_val < 256:
             try:
                 self.m5.set_allout(
-                    dout0=req_dout0, dout1=req_dout1, pwmout0=req_pwmout0_val
+                    dout0=req_dout0, dout1=req_dout1, pwmout0=req_pwmout0_val, sync=sync
                 )
             except BaseException as e:
                 self.get_logger().error(e)

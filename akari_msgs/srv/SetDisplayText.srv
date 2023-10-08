@@ -6,5 +6,6 @@ uint8 size
 string text_color
 string back_color
 bool refresh
+bool sync
 ---
 bool result

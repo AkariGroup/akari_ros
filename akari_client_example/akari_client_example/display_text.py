@@ -32,6 +32,7 @@ def main(args: Optional[str] = None) -> None:
     req.text_color = "BLACK"
     req.back_color = "WHITE"
     req.refresh = True
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -47,6 +48,7 @@ def main(args: Optional[str] = None) -> None:
     req.text_color = "BLUE"
     req.back_color = "YELLOW"
     req.refresh = True
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -62,6 +64,7 @@ def main(args: Optional[str] = None) -> None:
     req.text_color = "WHITE"
     req.back_color = "RED"
     req.refresh = False
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
@@ -77,6 +80,7 @@ def main(args: Optional[str] = None) -> None:
     req.text_color = "WHITE"
     req.back_color = "BLACK"
     req.refresh = True
+    req.sync = True
     client.future = client.cli.call_async(req)
     rclpy.spin_until_future_complete(client, client.future)
     client.get_logger().info(f"Result: : {client.future.result().result}")
